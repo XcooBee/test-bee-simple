@@ -1,0 +1,16 @@
+{
+  "name": "test-bee-simple",
+  "version": "1.0.0",
+  "description": "A sample bee template for Xcoobee Network",
+  "main": "index.js",
+  "scripts": {
+    "test": "istanbul cover ./node_modules/mocha/bin/_mocha -- test/*.js -R spec"
+  },
+  "author": "Oscar Rene Flores Presidente",
+  "license": "ISC",
+  "devDependencies": {
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0",
+    "sinon": "^1.17.7"
+  }
+}
