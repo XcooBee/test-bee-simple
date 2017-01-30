@@ -11,6 +11,6 @@ module.exports.flight = (services, data, callback) => {
 
     services.readStream.on("end", () => {
         services.log(`${fileData}`, "info");
-        // callback(null, "Success");
+        callback(null, "Success");
     });
 };
