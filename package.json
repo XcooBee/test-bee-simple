@@ -4,7 +4,8 @@
   "description": "A sample bee template for Xcoobee Network",
   "main": "index.js",
   "scripts": {
-    "test": "istanbul cover ./node_modules/mocha/bin/_mocha -- test/*.js -R spec"
+    "test": "istanbul cover ./node_modules/mocha/bin/_mocha -- test/*.js -R spec",
+    "flight" : "node test-utility.js"
   },
   "author": "Oscar Rene Flores Presidente",
   "license": "ISC",
