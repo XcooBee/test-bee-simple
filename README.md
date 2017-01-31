@@ -7,7 +7,7 @@ The bee includes the **test-utility** under the **flight** npm script, it's used
 as they were run in XcooBee infrasctructure.
 
 ### Usage
-`npm run-script flight <input-filepath> [--params <bee-parameters-filepath>]? [--out <output-dir-path>]? [--size [s|m|l]]?`
+`npm run-script flight <input-filepath> -- [--params <bee-parameters-filepath>]? [--out <output-dir-path>]? [--size [s|m|l]]?`
 
 ### Command args
 The utility takes a variety of switches that customize the way the bee is run.
