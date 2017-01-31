@@ -20,6 +20,11 @@ two main nodes:
 
 - bee_params
     A JSON object that represents the named parameters the bee will use, it will be passed to the bee in the data.parameters object.
+    By default we will look for a file named `parameters.json` in the same directory. If this file is not there then the the test utility will pass an empty parameters container to the code for execution.
+
+- flightprocessing
+    This is the state container for the flightpath. When you use the `services.addParam()` method, a paramater pair (key, value) will be added to this object and included for downstream processing. Later bees can read the message placed here and include in their processing. This is the way to communicate between bees as the flightpath is flown. Your parameters will also be assigned a prefix based on the system name of your bee.
+    
 
 #### Sample parameters file
 ```
@@ -30,13 +35,31 @@ two main nodes:
     "bee_params": {
         "favoriteColor": "green",
         "age": 27
-    }
+    },
+    "flightprocessing": {
+        "imagebee": {
+            "color":"green"
+        },
+        "crunchbee": {
+            "color": "yellow"
+        }
+    }    
 }
 ```
 
 ### --out <output-dir-path>
 The output directory in which all the files (WIP files and output files) will be written, it must exists as the utility
 won't create it.
+The default is the current directory of program.
 
 ### --size [s|m|l]
-This switch, among other things, determines the time the bee got available to do it's work before it is shutdown
+This switch, among other things, determines the time the bee got available to do it's work before it is shutdown.
+The default is `m`
+
+## Bee Life Cylce
+
+Invokation, processing, destruction
+
+
+## Services
+Each bee when invoked will be passed a collection of services and a colleciton of data to conduct its operations.
