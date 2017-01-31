@@ -1,9 +1,29 @@
 "use strict";
 
+/**
+ * Copyright 2017 [XcooBee legal name]
+
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 const fs = require("fs");
 
 let parametersFilePath = "parameters.json";
-let outputPath = "./output";
+let outputPath = "./";
+let ttl = 30000;
+
+// The amount of time reserved for clean up tasks
+const timeToCleanUp = 5000;
 
 // Track the number of open write streams
 const streamArray = [];
@@ -16,6 +36,13 @@ const closeStreams = () => {
     streamArray.forEach((value) => {
         value.close();
     });
+};
+
+let globalSequence = 1;
+const getNextId = () => {
+    const current = globalSequence;
+    globalSequence += 1;
+    return current;
 };
 
 // Assume we are on the node project directory
@@ -33,7 +60,31 @@ try {
     process.exit(1);
 }
 
-// If no params are provided we assume the bee won't require integrations
+// Set the size instance in which this bee will be run
+// We use the size to, among other things, choose the proper ttl
+const sizeIndex = argv.indexOf("--size");
+if (sizeIndex !== -1) {
+    const validSizes = ["s", "m", "l"];
+    const size = argv[sizeIndex + 1].toLowerCase();
+
+    if (validSizes.indexOf(size) === -1) {
+        console.log(`'${size}' is not a valid size, must be one of [s, m, l]`);
+        process.exit(1);
+    }
+
+    if (size === "s") {
+        ttl = 30000;
+    } else if (size === "m") {
+        ttl = 60000;
+    } else {
+        ttl = 90000;
+    }
+}
+
+// Substract the timeToCleanUp from ttl to get the net time the bee got available
+ttl -= timeToCleanUp;
+
+// If no params file are provided we assume the bee won't require integrations
 // nor parameters, unless the '--params' flag is used in which case it is, probably,
 // an user error pointing to an unexistent file
 const paramsIndex = argv.indexOf("--params");
@@ -47,10 +98,21 @@ if (paramsIndex !== -1) {
 }
 
 // If the user specifies the output as a directory, use a default file name 'output' with no extension
-// TODO: let the user specify the specific file
+// The output directory must exists, the utility WON'T create it
 const outputIndex = argv.indexOf("--out");
 if (outputIndex !== -1) {
     outputPath = argv[outputIndex + 1];
+
+    const stats = fs.lstatSync(outputPath);
+
+    if (!stats.isDirectory()) {
+        console.log(`${outputPath} is not a valid directory`);
+        process.exit(1);
+    }
+
+    if (!outputPath.endsWith("/")) {
+        outputPath = outputPath.concat("/");
+    }
 }
 
 // The input file must be the first argument
@@ -69,22 +131,27 @@ const services = {
         console.log(chunk);
     },
     // email service to mock the sending of an email
-    email: () => {
+    mail: () => {
         // TODO: What do in here? Log something? Do Nothing?
     },
+    getNextId,
     addParam: (key, value) => {
         console.log(`${key} => ${value} added to the next bee`);
     },
+    timeToRun: () => ttl,
     // The default streams for reading and writing
     readStream: fs.createReadStream(inputFilePath),
-    writeStream: fs.createWriteStream(`${outputPath}`),
-    // TODO: Create the stream manager
+    writeStream: fs.createWriteStream(`${outputPath}output`),
     writeStreamManager: () => ({
         getWriteStream: (fileName, type) => {
-            const typePath = type === "workFiles" ? workFilesPath : outputPath;
-            const nextStreamId = streamArray.length;
-            const stream = fs.createWriteStream(`./wip_${nextStreamId}`);
+            const typePath = type === "workFiles" ? "wip/" : "bee_output/";
+            const stream = fs.createWriteStream(`${outputPath}${typePath}${fileName}`);
             streamArray.push(stream);
+            return stream;
+        },
+        getReadStream: (fileName, type) => {
+            const typePath = type === "workFiles" ? "wip/" : "bee_output/";
+            const stream = fs.createReadStream(`${outputPath}${typePath}${fileName}`);
             return stream;
         },
     }),
@@ -114,18 +181,29 @@ if (fs.existsSync(parametersFilePath)) {
 
 
 const beeCallback = (err, result) => {
-    console.log(err);
-    console.log(result);
+    callbackCalled = true;
+    clearInterval();
     closeStreams();
+    if (err) {
+        console.log(err);
+        process.exit(1);
+    }
+
+    console.log(result);
     process.exit(0);
 };
 
 setTimeout(() => {
     if (!callbackCalled) {
         console.log("Timed-out");
+        clearInterval();
         closeStreams();
-        process.exit(1);
+        process.exit(2);
     }
-}, 5000);
+}, ttl);
+
+setInterval(() => {
+    ttl -= 100;
+}, 100);
 
 beeModule.flight(services, data, beeCallback);
