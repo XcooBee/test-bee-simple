@@ -29,7 +29,7 @@ flight(services, data, callback) {
 ```
 During the invokation `services` and `data` arguments are populated. They allow you to read the input file and get insight into the environment.
 
-### execution
+### <a id="exec"></a>execution
 The exuction step is left to your imagination. Anything you wish to do with the input file can be done given that you stay inside the restrictions for processing time, memory and diskspace.
 The current limits are
 - time: 
@@ -118,7 +118,7 @@ It is used as a tool to write and test bees and mimicks the behavior of the Xcoo
 ### Command args
 The utility takes a variety of switches that customize the way the bee is run.
 
-#### --params <bee-parameters-filepath>
+#### <a id="params"></a>--params <bee-parameters-filepath>
 The parameters file mimicks the `data` argument of your `flight()` function. You can change it to test different conditions.
 The test utility will use <bee-parameters-filepath> as the parameter file. The referenced file must be a valid JSON file and might contain
 four main nodes:
@@ -136,7 +136,26 @@ four main nodes:
     this object contains basic data about the user hiring the bee
     
 #### usage examples
-[Oscar to add]
+* Minimum call, 'input.png' located in the current directory:
+
+ ```npm run flight input.png```
+
+ * Call specifying the output directory, this is where `workFiles` folder and `output` folder will be placed. 
+
+ ```npm run flight input.png -- --out /path/to/folder```
+ 
+ *NOTICE* write streams retrieved through writeStreamManager service
+ will be placed in these folders based on the types passed to it, `workFiles` type will put the files in `/path/to/folder/workFiles/` folder, otherwise they will be put in `/path/to/folder/output` folder.
+
+* Call specifying the JSON file to be used as parameters for the bee (See [parameters](#params))
+
+```npm run flight input.png -- -params /path/to/parameters.json```
+
+* Call specifying the size of the instance to mimick (See [execution](#exec))
+
+```npm run flight input.png -- -size m```
+
+*NOTICE* You need to put the '--' (without the quotes) before passing any switch to the script
 
 #### Sample parameters file
 ```
