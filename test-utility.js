@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- * Copyright 2017 [XcooBee legal name]
+ * Copyright 2017 XcooBee LLC
 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,9 +75,9 @@ if (sizeIndex !== -1) {
     if (size === "s") {
         ttl = 30000;
     } else if (size === "m") {
-        ttl = 60000;
+        ttl = 150000;
     } else {
-        ttl = 90000;
+        ttl = 300000;
     }
 }
 
@@ -122,7 +122,8 @@ if (!fs.existsSync(inputFilePath)) {
     console.log(`Input file '${inputFilePath}' doesn't exist`);
     process.exit(1);
 }
-
+// TODO: Validation for fileName, what should happen if the user requests a writeStream for an 
+// already created fileName
 // Create the services object
 const services = {
     // Just log a message to the system console
@@ -141,16 +142,16 @@ const services = {
     timeToRun: () => ttl,
     // The default streams for reading and writing
     readStream: fs.createReadStream(inputFilePath),
-    writeStream: fs.createWriteStream(`${outputPath}output`),
+    writeStream: fs.createWriteStream(`${outputPath}output/bee_default_output`),
     writeStreamManager: () => ({
         getWriteStream: (fileName, type) => {
-            const typePath = type === "workFiles" ? "wip/" : "bee_output/";
+            const typePath = type === "wip" ? "workFiles/" : "output/";
             const stream = fs.createWriteStream(`${outputPath}${typePath}${fileName}`);
             streamArray.push(stream);
             return stream;
         },
         getReadStream: (fileName, type) => {
-            const typePath = type === "workFiles" ? "wip/" : "bee_output/";
+            const typePath = type === "wip" ? "workFiles/" : "output/";
             const stream = fs.createReadStream(`${outputPath}${typePath}${fileName}`);
             return stream;
         },
