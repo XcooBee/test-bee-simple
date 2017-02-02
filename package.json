@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "istanbul cover ./node_modules/mocha/bin/_mocha -- test/*.js -R spec",
-    "flight" : "node test-utility.js"
+    "flight": "node node_modules/bee-test-utility/src/test-utility.js"
   },
   "author": "Oscar Rene Flores Presidente",
   "license": "ISC",
@@ -16,5 +16,8 @@
     "eslint": "^3.12.2",
     "eslint-config-airbnb-base": "^11.0.0",
     "eslint-plugin-import": "^2.2.0"
+  },
+  "dependencies": {
+    "bee-test-utility": "git+git@github.com:XcooBee/bee-test-utility.git"
   }
 }
