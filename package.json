@@ -15,9 +15,7 @@
     "sinon": "^1.17.7",
     "eslint": "^3.12.2",
     "eslint-config-airbnb-base": "^11.0.0",
-    "eslint-plugin-import": "^2.2.0"
-  },
-  "dependencies": {
+    "eslint-plugin-import": "^2.2.0",
     "bee-test-utility": "git+git@github.com:XcooBee/bee-test-utility.git"
   }
 }
