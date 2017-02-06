@@ -6,7 +6,7 @@ module.exports.flight = (services, data, callback) => {
         services.mail("sender", "awesome-template", { favColor: "green" });
         callback(null, "Success");
     });
-    writeStream.end();
+
     writeStream.write("Hello World!", "utf8", () => {
         writeStream.end();
     });
