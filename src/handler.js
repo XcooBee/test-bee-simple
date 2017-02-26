@@ -23,7 +23,7 @@ module.exports.flight = (services, data, callback) => {
         return callback(err.message);
     });
 
-    anotherWriteStream.on("erro", (err) => {
+    anotherWriteStream.on("error", (err) => {
         return callback(err.message);
     });
 };
