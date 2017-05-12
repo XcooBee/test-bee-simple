@@ -125,7 +125,7 @@ four main nodes:
 - integrations
     A JSON object that represents the app integrations the bee will need, it will be passed to the bee in the data.integrations object.
 
-- bee_params
+- parameters
     A JSON object that represents the named parameters the bee will use, it will be passed to the bee in the data.parameters object.
     By default we will look for a file named `parameters.json` in the same directory. If this file is not there then the the test utility will pass an empty parameters container to the code for execution.
 
@@ -161,9 +161,11 @@ four main nodes:
 ```
 {
     "integrations" : {
-        "facebook": "my-facebook-authtoken"
+        "facebook": {
+            "access_token":"my-facebook-authtoken"
+        }
     },
-    "bee_params": {
+    "parameters": {
         "favoriteColor": "green",
         "age": 27
     },
