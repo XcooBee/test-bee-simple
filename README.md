@@ -172,7 +172,8 @@ four main nodes:
     "user_data": {
         "first_name": "Brian",
         "last_name": "Smith",
-        "xcoobeeid": "~bmsith"
+        "xcoobeeid": "~bmsith",
+        "locale": "us-en"
     },
     "flightprocessing": {
         "imagebee": {
