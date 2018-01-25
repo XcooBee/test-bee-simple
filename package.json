@@ -1,14 +1,14 @@
 {
   "name": "test-bee-simple",
   "version": "1.0.0",
-  "description": "A sample bee template for Xcoobee Network",
+  "description": "A sample minimum bee template for Xcoobee Network",
   "main": "index.js",
   "scripts": {
     "test": "istanbul cover ./node_modules/mocha/bin/_mocha -- test/*.js -R spec",
     "flight": "node node_modules/bee-test-utility/src/test-utility.js"
   },
-  "author": "Oscar Rene Flores Presidente",
-  "license": "ISC",
+  "author": "Bilal Soylu",
+  "license": "Apache-2.0",
   "devDependencies": {
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
