@@ -4,18 +4,26 @@
   "description": "A sample minimum bee template for Xcoobee Network",
   "main": "index.js",
   "scripts": {
-    "test": "istanbul cover ./node_modules/mocha/bin/_mocha -- test/*.js -R spec",
+    "test": "istanbul cover ./node_modules/mocha/bin/_mocha -- test/*.js -R spec --exit --timeout 120000",
     "flight": "node node_modules/bee-test-utility/src/test-utility.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XcooBee/test-bee-simple.git"
+  },
+  "bugs": {
+    "url": "https://github.com/XcooBee/test-bee-simple/issues"
+  },
+  "homepage": "https://github.com/XcooBee/test-bee-simple#readme",
   "author": "Bilal Soylu",
   "license": "Apache-2.0",
   "devDependencies": {
+    "bee-test-utility": "git+git@github.com:XcooBee/bee-test-utility.git",
+    "eslint": "^5.12.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.15.0",
     "istanbul": "^0.4.5",
-    "mocha": "^3.2.0",
-    "sinon": "^1.17.7",
-    "eslint": "^3.12.2",
-    "eslint-config-airbnb-base": "^11.0.0",
-    "eslint-plugin-import": "^2.2.0",
-    "bee-test-utility": "git+git@github.com:XcooBee/bee-test-utility.git"
+    "mocha": "^5.2.0",
+    "sinon": "^7.2.2"
   }
 }
